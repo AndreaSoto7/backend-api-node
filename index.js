@@ -6,6 +6,9 @@ const db = require('./models');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.use(bodyParser.json());
+
+require('./routes')(app);
 
 // Para habilitar la BD
 db.sequelize.sync({

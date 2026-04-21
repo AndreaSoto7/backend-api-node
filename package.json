@@ -11,6 +11,7 @@
   "dependencies": {
     "body-parser": "^2.2.2",
     "express": "^5.2.1",
+    "joi": "^18.1.2",
     "nodemon": "^3.1.14",
     "sequelize": "^6.37.8",
     "sha1": "^1.1.1",

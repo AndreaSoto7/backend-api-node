@@ -1,61 +1,27 @@
-const { createPersona, updatePersona, deletePersona, getPersonaList } = require('../services/personas.service');
 const { personaSchema } = require('../validators/persona.schema');
+const personaService = require('../services/personas.service.js');
 
 exports.getPersonas = async (req, res) => {
-    const personas = await getPersonaList()
+    const personas = await personaService.getObjectList();
     res.json(personas);
 };
 
 exports.getPersonaById = async (req, res) => {
-    const { id } = req.params;
-    const persona = await getPersonaById(id);
-    if (!persona) {
-        res.status(404).json({ message: 'Person not found' });
-        return;
-    }
-    res.json(persona);
+    res.json(req.obj);
 };
 
 exports.postPersonaCreate = async (req, res) => {
-    if(!req.body || Object.keys(req.body).length === 0) {
-        res.status(400).json({ message: 'Request body is empty' });
-        return;
-    }
-    const { nombre, apellido, edad, ciudad, fechaNacimiento } = req.body;
-    const { error } = personaSchema.validate(req.body);
-    if(error) {
-        res.status(400).json({ message: error.details[0].message });
-        return;
-    }
-    const persona = await createPersona(nombre, apellido, edad, ciudad, fechaNacimiento);
+    const persona = await personaService.createObject(req.body);
     res.json(persona);
 };
+
 exports.putPersonaUpdate = async (req, res) => {
-    if(!req.body || Object.keys(req.body).length === 0) {
-        res.status(400).json({ message: 'Request body is empty' });
-        return;
-    }
     const { id } = req.params;
-    const { nombre, apellido, edad, ciudad, fechaNacimiento } = req.body;
-    if(!nombre || !apellido || !edad || !ciudad || !fechaNacimiento) {
-        res.status(400).json({ message: 'Missing required fields' });
-        return;
-    }
-    let persona = await getPersonaById(id);
-    if (!persona) {
-        res.status(404).json({ message: 'Person not found' });
-        return;
-    }
-    persona = await updatePersona(id, nombre, apellido, edad, ciudad, fechaNacimiento);
+    const persona = await personaService.updateObject(id, req.body);
     res.json(persona);
 };
 exports.deletePersona = async (req, res) => {
     const { id } = req.params;
-    const persona = await getPersonaById(id);
-    if (!persona) {
-        res.status(404).json({ message: 'Person not found' });
-        return;
-    }
-    await deletePersona(id);
+    await personaService.deleteObject(id);
     res.json({ message: 'Persona eliminada correctamente' });
 };

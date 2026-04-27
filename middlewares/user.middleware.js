@@ -15,6 +15,9 @@ const requireAuth = (req, res, next) => {
     if (!payload) {
         return res.status(401).json({ message: "Unauthorized" });
     }
+    if (payload.id === undefined) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
     const user = findUserById(payload.id);
     if (!user) {
         return res.status(401).json({ message: "Unauthorized" });

@@ -11,7 +11,7 @@ exports.findUserByEmail = async (email) => {
 exports.createUser = async (email, password, nombreCompleto) => {
     return await db.usuario.create({
         email,
-        password: encodedPassword,
+        password: password,
         nombreCompleto
     });
 }
